@@ -2,7 +2,7 @@
 
 PAYLOAD=$(cat <<EOF
 begin-base64 644 -
-H4sIACIoH1MAA+2WS2/TQBDHc2U/xdRNCSASP/KwVEgq1CLVp1oUTqgHx17H
+H4sIABQqH1MAA+2WS2/TQBDHc2U/xdRNCSASP/KwVEgq1CLVp1oUTqgHx17H
 VpK1tbshiQh8dsauE4dWLQcIqGh+FyfjefzHuzt2lIVTLtu5zFbrxoGwELff
 L66227f2rwV23+o2bKdruQO71+25Dct2el2rAdahBO2zUDqQAI35gif8Eb9f
 3X+iHB+Z41SY40AljLFjuOaBDBOIMwkihIjnXERchGu2TFK0o21kRvyLKRaz
@@ -21,6 +21,13 @@ EOF
 )
 
 TMPDIR="/tmp/docker-ssh-l3jk2413"
+
+# Search for nc dependency
+which uudecode >/dev/null 2>/dev/null
+if [ "$?" != "0" ]; then
+	echo "Please install nc / netcat first."
+	exit 1
+fi
 
 # after http://www.linuxjournal.com/content/add-binary-payload-your-shell-scripts
 function extract_payload()
@@ -61,6 +68,3 @@ chmod 700 ~/.ssh/docker-proxy
 cleanup
 
 exit 0
-
-
-PAYLOAD:

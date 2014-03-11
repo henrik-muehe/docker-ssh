@@ -1,5 +1,12 @@
 TMPDIR="/tmp/docker-ssh-l3jk2413"
 
+# Search for nc dependency
+which uudecode >/dev/null 2>/dev/null
+if [ "$?" != "0" ]; then
+	echo "Please install nc / netcat first."
+	exit 1
+fi
+
 # after http://www.linuxjournal.com/content/add-binary-payload-your-shell-scripts
 function extract_payload()
 {
@@ -39,6 +46,3 @@ chmod 700 ~/.ssh/docker-proxy
 cleanup
 
 exit 0
-
-
-PAYLOAD:
