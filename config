@@ -1,0 +1,2 @@
+Host *.docker
+    ProxyCommand ~/.ssh/docker-proxy %h %p

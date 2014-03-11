@@ -1,0 +1,65 @@
+#!/bin/bash
+
+TMPDIR="/tmp/docker-ssh-l3jk2413"
+
+# after http://www.linuxjournal.com/content/add-binary-payload-your-shell-scripts
+function extract_payload()
+{
+	rm -rf $TMPDIR
+	mkdir -p $TMPDIR
+	match=$(grep --text --line-number '^PAYLOAD:$' $0 | cut -d ':' -f 1)
+	payload_start=$((match + 1))
+	tail -n +$payload_start $0 | uudecode | tar -xzf - -C $TMPDIR
+}
+
+function cleanup()
+{
+	rm -rf $TMPDIR
+}
+
+# create directory and restrict permissions if it doesn't exist
+mkdir ~/.ssh 2>/dev/null && chmod 700 ~/.ssh
+
+# extract data
+extract_payload
+
+# check for previous install of this addon
+touch ~/.ssh/config
+if grep -q "\\.docker" ~/.ssh/config || grep -q "docker-proxy" ~/.ssh/config; then
+	echo "Upgrading docker-ssh"
+else
+	echo "Installing docker-ssh"
+
+	# install config
+	cat $TMPDIR"/config" >> ~/.ssh/config
+	chmod 600 ~/.ssh/config
+fi
+
+# upgrade/install proxy
+cp $TMPDIR"/docker-proxy" ~/.ssh/
+chmod 700 ~/.ssh/docker-proxy
+
+# cleanup
+cleanup
+
+exit 0
+
+
+PAYLOAD:
+begin 644 -
+M'XL(`!<@'U,``^V62V_30!#'<V4_Q=1-"2`2/_*P5$@JU"+5IUH43J@'QU['
+M5I*UM;LAB0A\=L:N$X=6+0<(J&A^%R?C>?S'NSMVE(53+MNYS%;KQH&P$+??
+M+ZZVV[?VKP5VW^HV;*=KN0.[U^VY#<MV>EVK`=:A!.VS4#J0`(WY@B?\$;]?
+MW7^B'!^9XU28XT`EC+%CN.:!#!.(,PDBA(CG7$1<A&NV3%*THVUD1OR+*1:S
+M&3CU;Y;&\!F,YID!1T,P+`-NWH!.N&#/>)AD8/@S'B@.J<#GC:&8R`3!=1AH
+MB%.I=,=`SU6JP69Q>D=)5&[2^VHJ^Y]15"6[%;/]-\?M`>/""=;90D(>Z.2>
+MTO<K+8-0XTT9S+GF4K'+J^N/P^:+LE#3A@TH'D%+F9W;O*;9>LG\JP_HXQ09
+MSA,>3O?C*^U%&@.&*!_5PV93&HNXG?'GECZI8,)/H6E!F`D=I`*/ML"<55EX
+MFV=2CQ[2OXN!-&+>!>JOPG*%'4PDS\'8B3+0%"RGT/J:RU1H[/(;]E3I]B[N
+M"H2*2J>8BFPIMD^Y+ER*-6#TW*DC'I?J^<SS:ZFXFCE'!Y2PT^SY[Z)(<J4*
+MS>%"0QO7XK0%[1B<>FE0]^L;TYQ@%UC(+P9B449@MC03H+.Z*,/=V_1\*)>"
+M_>LC_%M@3W$Z.6R-8L@/>KV'YC^^'.SM_.^[KH/S'U\``YK_?X/+#`?<JVH^
+ME&>NW/GGV7P>B`B^FQVE$C/:^TJ`DP1.\J>]ZPF"(`B"(`B"(`B"(`B"(`B"
+1(`B"(`CB_^('IM4OXP`H````
+`
+end
