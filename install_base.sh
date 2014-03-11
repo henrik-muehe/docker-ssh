@@ -1,5 +1,3 @@
-#!/bin/bash
-
 TMPDIR="/tmp/docker-ssh-l3jk2413"
 
 # after http://www.linuxjournal.com/content/add-binary-payload-your-shell-scripts
@@ -7,9 +5,7 @@ function extract_payload()
 {
 	rm -rf $TMPDIR
 	mkdir -p $TMPDIR
-	match=$(grep --text --line-number '^PAYLOAD:$' $0 | cut -d ':' -f 1)
-	payload_start=$((match + 1))
-	tail -n +$payload_start $0 | uudecode | tar -xzf - -C $TMPDIR
+	echo "$PAYLOAD" | uudecode | tar -xzf - -C $TMPDIR
 }
 
 function cleanup()

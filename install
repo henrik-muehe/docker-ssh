@@ -1,5 +1,25 @@
 #!/bin/bash
 
+PAYLOAD=$(cat <<EOF
+begin-base64 644 -
+H4sIACIoH1MAA+2WS2/TQBDHc2U/xdRNCSASP/KwVEgq1CLVp1oUTqgHx17H
+VpK1tbshiQh8dsauE4dWLQcIqGh+FyfjefzHuzt2lIVTLtu5zFbrxoGwELff
+L66227f2rwV23+o2bKdruQO71+25Dct2el2rAdahBO2zUDqQAI35gif8Eb9f
+3X+iHB+Z41SY40AljLFjuOaBDBOIMwkihIjnXERchGu2TFK0o21kRvyLKRaz
+GTj1b5bG8BmM5pkBR0MwLANu3oBOuGDPeJhkYPgzHigOqcDnjaGYyATBdRho
+iFOpdMdAz1WqwWZxekdJVG7S+2oq+59RVCW7FbP9N8ftAePCCdbZQkIe6OSe
+0vcrLYNQ400ZzLnmUrHLq+uPw+aLslDThg0oHkFLmZ3bvKbZesn8qw/o4xQZ
+zhMeTvfjK+1FGgOGKB/Vw2ZTGou4nfHnlj6pYMJPoWlBmAkdpAKPtsCcVVl4
+m2dSjx7Sv4uBNGLeBeqvwnKFHUwkz8HYiTLQFCyn0Pqay1Ro7PIb9lTp9i7u
+CoSKSqeYimwptk+5LlyKNWD03KkjHpfq+czza6m4mjlHB5Sw0+z576JIcqUK
+zeFCQxvX4rQF7RicemlQ9+sb05xgF1jILwZiUUZgtjQToLO6KMPd2/R8KJeC
+/esj/FtgT3E6OWyNYsgPer2H5j++HOzt/O+7roPzH18AA5r/f4PLDAfcq2o+
+lGeu3Pnn2XweiAi+mx2lEjPa+0qAkwRO8qe96wmCIAiCIAiCIAiCIAiCIAiC
+IAiCIAji/+IHptUv4wAoAAA=
+====
+EOF
+)
+
 TMPDIR="/tmp/docker-ssh-l3jk2413"
 
 # after http://www.linuxjournal.com/content/add-binary-payload-your-shell-scripts
@@ -7,9 +27,7 @@ function extract_payload()
 {
 	rm -rf $TMPDIR
 	mkdir -p $TMPDIR
-	match=$(grep --text --line-number '^PAYLOAD:$' $0 | cut -d ':' -f 1)
-	payload_start=$((match + 1))
-	tail -n +$payload_start $0 | uudecode | tar -xzf - -C $TMPDIR
+	echo "$PAYLOAD" | uudecode | tar -xzf - -C $TMPDIR
 }
 
 function cleanup()
@@ -46,20 +64,3 @@ exit 0
 
 
 PAYLOAD:
-begin 644 -
-M'XL(`!<@'U,``^V62V_30!#'<V4_Q=1-"2`2/_*P5$@JU"+5IUH43J@'QU['
-M5I*UM;LAB0A\=L:N$X=6+0<(J&A^%R?C>?S'NSMVE(53+MNYS%;KQH&P$+??
-M+ZZVV[?VKP5VW^HV;*=KN0.[U^VY#<MV>EVK`=:A!.VS4#J0`(WY@B?\$;]?
-MW7^B'!^9XU28XT`EC+%CN.:!#!.(,PDBA(CG7$1<A&NV3%*THVUD1OR+*1:S
-M&3CU;Y;&\!F,YID!1T,P+`-NWH!.N&#/>)AD8/@S'B@.J<#GC:&8R`3!=1AH
-MB%.I=,=`SU6JP69Q>D=)5&[2^VHJ^Y]15"6[%;/]-\?M`>/""=;90D(>Z.2>
-MTO<K+8-0XTT9S+GF4K'+J^N/P^:+LE#3A@TH'D%+F9W;O*;9>LG\JP_HXQ09
-MSA,>3O?C*^U%&@.&*!_5PV93&HNXG?'GECZI8,)/H6E!F`D=I`*/ML"<55EX
-MFV=2CQ[2OXN!-&+>!>JOPG*%'4PDS\'8B3+0%"RGT/J:RU1H[/(;]E3I]B[N
-M"H2*2J>8BFPIMD^Y+ER*-6#TW*DC'I?J^<SS:ZFXFCE'!Y2PT^SY[Z)(<J4*
-MS>%"0QO7XK0%[1B<>FE0]^L;TYQ@%UC(+P9B449@MC03H+.Z*,/=V_1\*)>"
-M_>LC_%M@3W$Z.6R-8L@/>KV'YC^^'.SM_.^[KH/S'U\``YK_?X/+#`?<JVH^
-ME&>NW/GGV7P>B`B^FQVE$C/:^TJ`DP1.\J>]ZPF"(`B"(`B"(`B"(`B"(`B"
-1(`B"(`CB_^('IM4OXP`H````
-`
-end
