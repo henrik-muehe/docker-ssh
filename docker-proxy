@@ -1,0 +1,39 @@
+#!/bin/bash
+
+
+# Search for nc dependency
+which nc >/dev/null 2>/dev/null
+if [ "$?" != "0" ]; then
+	echo "Please install nc / netcat first."
+	exit 1
+fi
+
+# Search for docker dependency
+which docker >/dev/null 2>/dev/null
+if [ "$?" != "0" ]; then
+	echo "Please install docker first. docker must be in your path."
+	exit 1
+fi
+
+# Extract parameters
+HOST=$(echo $1 | sed 's/.docker//')
+PORT=$2
+
+# Check parameters
+if [ "$HOST" == "" ] || [ "$PORT" == "" ]; then
+	echo "Usage: $0 container-name.docker <port>"
+	exit 1
+fi
+
+# Extract container id
+ID=$(docker ps | grep " "$HOST" " | awk '{print $1}')
+if [ "$ID" == "" ]; then
+        echo "Unknown docker container name." >&2
+        exit 1
+fi
+
+# Extract container IP
+IP=$(docker inspect $ID | grep "IPAddress" | cut -d ':' -f 2 | sed 's/[ ",]//g')
+
+# Proxy connection to container
+nc $IP $PORT
