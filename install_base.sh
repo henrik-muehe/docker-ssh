@@ -3,7 +3,7 @@ TMPDIR="/tmp/docker-ssh-l3jk2413"
 # Search for nc dependency
 which uudecode >/dev/null 2>/dev/null
 if [ "$?" != "0" ]; then
-	echo "Please install nc / netcat first."
+	echo "Please install uudecode first."
 	exit 1
 fi
 
